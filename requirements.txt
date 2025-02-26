@@ -1,0 +1,9 @@
+streamlit
+python-dotenv
+google-generativeai
+streamlit-option-menu
+requests
+Pillow
+plotly
+numpy
+matplotlib
