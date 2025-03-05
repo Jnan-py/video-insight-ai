@@ -124,12 +124,20 @@ def analyze_type(transcript):
 
 def parse_gemini_response(response_text):
     try:
-        cleaned = re.sub(r'```json|```', '', response_text)
-        cleaned = re.sub(r'[\x00-\x1F\x7F-\x9F]', ' ', cleaned)
-        json_str = re.search(r'\{[\s\S]*\}', cleaned)
-        if json_str:
-            return json.loads(json_str.group())
-        return None
+        try:
+            cleaned = re.sub(r'```json|```', '', response_text)
+            cleaned = re.sub(r'[\x00-\x1F\x7F-\x9F]', ' ', cleaned)
+            json_str = re.search(r'\{[\s\S]*\}', cleaned)
+            if json_str:
+                return json.loads(json_str.group())
+            return None
+
+        except Exception as e:
+            cleaned = re.sub(r'```json|```', '', response_text)
+            json_str = re.search(r'\{.*\}', cleaned, re.DOTALL)
+            if json_str:
+                return json.loads(json_str.group())
+            return None
 
     except Exception as e:
         st.error(f"Failed to parse response: {str(e)}")
